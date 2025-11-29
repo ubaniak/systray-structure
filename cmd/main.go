@@ -16,8 +16,9 @@ import (
 	"systray-app/app"
 )
 
-//go:embed all:webapp
+//go:embed all:frontend
 var webAssets embed.FS
+var staticFilePath = "frontend/out"
 
 func main() {
 	// Start HTTP server in a goroutine
@@ -56,7 +57,7 @@ func main() {
 
 func startServer(apiRegister *app.Register) *http.Server {
 	// Embed and prepare static files
-	staticFS, err := fs.Sub(webAssets, "webapp/out")
+	staticFS, err := fs.Sub(webAssets, staticFilePath)
 	if err != nil {
 		log.Fatal(err)
 	}
