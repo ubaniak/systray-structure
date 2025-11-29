@@ -14,21 +14,31 @@ import (
 	"github.com/pkg/browser"
 
 	"systray-app/app"
+	"systray-app/cmd/apps"
 )
 
 //go:embed all:frontend
 var webAssets embed.FS
 var staticFilePath = "frontend/out"
 
+const (
+	AppTitle   = "My Next.js App"
+	AppTooltip = "My Go + Next.js Tray App"
+)
+
 func main() {
 	// Start HTTP server in a goroutine
 	apiRegister := app.NewRegister()
+	err := apps.AddApps(apiRegister)
+	if err != nil {
+		log.Fatalf("Failed to add apps: %v", err)
+	}
 	srv := startServer(apiRegister)
 
 	// Start system tray
 	systray.Run(func() {
-		systray.SetTitle("My Next.js App")
-		systray.SetTooltip("My Go + Next.js Tray App")
+		systray.SetTitle(AppTitle)
+		systray.SetTooltip(AppTooltip)
 
 		mOpen := systray.AddMenuItem("Open UI", "Open the web interface")
 		mQuit := systray.AddMenuItem("Quit", "Exit the app")

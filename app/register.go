@@ -14,7 +14,7 @@ func NewRegister() *Register {
 	}
 }
 
-func (r *Register) AddApp(app App) {
+func (r *Register) Add(app App) {
 	r.apps = append(r.apps, app)
 }
 
