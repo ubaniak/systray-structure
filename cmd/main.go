@@ -1,17 +1,13 @@
 package main
 
 import (
-	"context"
 	"embed"
 	"io/fs"
 	"log"
 	"net"
 	"net/http"
-	"time"
 
-	"github.com/getlantern/systray"
 	"github.com/gorilla/mux"
-	"github.com/pkg/browser"
 
 	"systray-app/app"
 	"systray-app/cmd/apps"
@@ -35,34 +31,8 @@ func main() {
 	}
 	srv := startServer(apiRegister)
 
-	// Start system tray
-	systray.Run(func() {
-		systray.SetTitle(AppTitle)
-		systray.SetTooltip(AppTooltip)
-
-		mOpen := systray.AddMenuItem("Open UI", "Open the web interface")
-		mQuit := systray.AddMenuItem("Quit", "Exit the app")
-
-		for {
-			select {
-			case <-mOpen.ClickedCh:
-				url := "http://localhost:8080"
-				if err := browser.OpenURL(url); err != nil {
-					log.Printf("Failed to open browser: %v", err)
-				}
-			case <-mQuit.ClickedCh:
-				systray.Quit()
-				return
-			}
-		}
-	}, func() {
-		// Cleanup: Shut down server gracefully
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-		if err := srv.Shutdown(ctx); err != nil {
-			log.Printf("Server forced to shutdown: %v", err)
-		}
-	})
+	// Platform-specific run loop (systray on darwin+cgo, signal wait elsewhere)
+	runApp(srv)
 }
 
 func startServer(apiRegister *app.Register) *http.Server {

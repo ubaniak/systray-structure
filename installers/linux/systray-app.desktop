@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=SystrayApp
+Comment=Go + Next.js Tray App
+Exec=/usr/local/bin/systray-app
+Terminal=false
+Type=Application
+Categories=Utility;
