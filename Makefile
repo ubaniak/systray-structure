@@ -10,9 +10,9 @@ run:
 	go run ./cmd
 
 build:
-	./build.sh
+	./scripts/build.sh
 
 installers:
-	./build.sh --installers
+	./scripts/build.sh --installers
 
 installer: installers

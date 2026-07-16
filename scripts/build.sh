@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Run from the repo root regardless of where the script is invoked from.
+cd "$(dirname "$0")/.."
+
 # Pass --installers to also package installers (.dmg, .zip, .deb) after building.
 BUILD_INSTALLERS=0
 if [[ "$1" == "--installers" ]]; then
